@@ -12,11 +12,13 @@ Before starting, make sure you have the following:
 ## Cloning the Project
 
 1. Clone the GitHub Repository
+
 ```bash
  git clone https://github.com/Luis-Martin/operation-system-fp
 ```
 
 2. Navigate to the project directory
+
 ```bash
 cd operation-system-fp
 ```
@@ -30,24 +32,29 @@ main.tf: Terraform configuration file that defines the resources needed for the 
 1. Open Google Cloud Shell
 
 2. Initialize Terraform (First time only)
+
 ```bash
 terraform init
 ```
 
 3. Plan the Terraform deployment
+
 ```bash
 terraform plan
 ```
 
 4. pply the Terraform plan
+
 ```bash
 terraform apply
 ```
 
 5. Testing the Environment
+
 Once the deployment is complete, you can connect to the virtual machines via SSH.
 
-6. ** Destroy the Infrastructure**
+6. Destroy the Infrastructure
+
 ```bash
 terraform destroy
 ```

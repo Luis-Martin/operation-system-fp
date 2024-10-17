@@ -5,6 +5,7 @@ Final project for the operating systems course, where we assess the security of 
 ## Prerequisites
 
 Before starting, make sure you have the following:
+
 - An active Google Cloud Platform (GCP) account.
 - A project selected in GCP where the infrastructure will be deployed.
 - Installed locally or using Google Cloud Shell.
@@ -43,7 +44,7 @@ terraform init
 terraform plan
 ```
 
-4. pply the Terraform plan
+4. Apply the Terraform plan
 
 ```bash
 terraform apply

@@ -1,0 +1,10 @@
+#!/bin/bash
+
+git clone https://github.com/rfxn/linux-malware-detect
+cd ./linux-malware-detect
+sudo ./install.sh
+
+sudo maldet -d
+sudo maldet -u
+sudo maldet -a
+sudo cp /usr/local/maldetect/logs/event_log .

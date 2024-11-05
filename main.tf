@@ -72,7 +72,6 @@ resource "google_compute_instance" "target_vm" {
     sudo apt-get install -yq build-essential net-tools python3-pip rsync git curl ufw
     # lynis
     cd /usr/local && git clone https://github.com/CISOfy/lynis
-    echo 'export PATH="$PATH:/usr/local/lynis"' >> ~/.bashrc
     # servicio: web - apache
     sudo apt install -y apache2 openssh-server
     sudo systemctl enable apache2

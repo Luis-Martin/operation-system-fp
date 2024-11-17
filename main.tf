@@ -83,6 +83,9 @@ resource "google_compute_instance" "target_vm" {
     sudo ufw allow ssh
     # error de permisos
     sudo chmod 777 /etc/shadow
+    # fortificación
+    git clone https://github.com/rfxn/linux-malware-detect
+    cd ~/linux-malware-detect && sudo ./install.sh
   EOF
 
   network_interface {

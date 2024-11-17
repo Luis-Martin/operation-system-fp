@@ -72,6 +72,9 @@ resource "google_compute_instance" "target_vm" {
     sudo apt-get install -yq build-essential net-tools python3-pip rsync git curl ufw
     # lynis
     cd /usr/local && git clone https://github.com/CISOfy/lynis
+    # maldet
+    cd /usr/local && git clone https://github.com/rfxn/linux-malware-detect
+    cd /usr/local/linux-malware-detect && sudo ./install.sh
     # servicio: web - apache
     sudo apt install -y apache2 openssh-server
     sudo systemctl enable apache2
@@ -84,8 +87,6 @@ resource "google_compute_instance" "target_vm" {
     # error de permisos
     sudo chmod 777 /etc/shadow
     # fortificación
-    git clone https://github.com/rfxn/linux-malware-detect
-    cd ~/linux-malware-detect && sudo ./install.sh
   EOF
 
   network_interface {

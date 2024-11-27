@@ -70,23 +70,62 @@ resource "google_compute_instance" "target_vm" {
     sudo apt-get update
     # paquetes básicos
     sudo apt-get install -yq build-essential net-tools python3-pip rsync git curl ufw
-    # lynis
-    cd /usr/local && git clone https://github.com/CISOfy/lynis
-    # maldet
-    cd /usr/local && git clone https://github.com/rfxn/linux-malware-detect
-    cd /usr/local/linux-malware-detect && sudo ./install.sh
+   
+    # SERVICIOS
+
     # servicio: web - apache
     sudo apt install -y apache2 openssh-server
     sudo systemctl enable apache2
     sudo systemctl start apache2
     sudo ufw allow 'WWW'
+    
     # servicio: ssh - openssh
     sudo apt install -y openssh-server
     sudo systemctl enable ssh
     sudo ufw allow ssh
+    
+    # servicio: ftp - vsftppd
+    sudo apt install -y vsftpd
+    sudo systemctl enable vsftpd
+    sudo systemctl start vsftpd
+    sudo ufw allow ftp
+
+    # servicio: db - mysql
+    sudo apt install -y mariadb-server
+    sudo systemctl enable mariadb
+    sudo systemctl start mariadb
+    sudo ufw allow 3306
+
+    # servicio: dns - bind9
+    sudo apt install -y bind9
+    sudo systemctl enable bind9
+    sudo systemctl start bind9
+    sudo ufw allow 53
+    
+    # servicio: ftp dir - nfs
+    sudo apt install -y nfs-kernel-server
+    sudo systemctl enable nfs-server
+    sudo systemctl start nfs-server
+    sudo ufw allow 2049
+
+    # servicio: ftp - samba
+    sudo apt install -y samba
+    sudo systemctl enable smbd
+    sudo systemctl start smbd
+    sudo ufw allow samba
+
     # error de permisos
     sudo chmod 777 /etc/shadow
-    # fortificación
+
+
+    # FORTIFICACIÓN
+
+    # lynis
+    cd /usr/local && git clone https://github.com/CISOfy/lynis
+
+    # maldet
+    cd /usr/local && git clone https://github.com/rfxn/linux-malware-detect
+    cd /usr/local/linux-malware-detect && sudo ./install.sh
   EOF
 
   network_interface {

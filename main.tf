@@ -53,8 +53,8 @@ resource "google_compute_firewall" "allow-ssh" {
 
 # Máquina virtual objetivo con servicios y oonfiguraciones vulnerables
 
-resource "google_compute_instance" "target_vm" {
-  name         = "target-vm"
+resource "google_compute_instance" "target_vm_1" {
+  name         = "target-vm-1"
   machine_type = "f1-micro"
   zone         = "us-west1-a"
   tags         = ["ssh", "target"]
@@ -83,6 +83,89 @@ resource "google_compute_instance" "target_vm" {
     sudo apt install -y openssh-server
     sudo systemctl enable ssh
     sudo ufw allow ssh
+    
+    # servicio: ftp - vsftppd
+    sudo apt install -y vsftpd
+    sudo systemctl enable vsftpd
+    sudo systemctl start vsftpd
+    sudo ufw allow ftp
+
+    # servicio: db - mysql
+    sudo apt install -y mariadb-server
+    sudo systemctl enable mariadb
+    sudo systemctl start mariadb
+    sudo ufw allow 3306
+
+    # servicio: dns - bind9
+    sudo apt install -y bind9
+    sudo systemctl enable bind9
+    sudo systemctl start bind9
+    sudo ufw allow 53
+    
+    # servicio: ftp dir - nfs
+    sudo apt install -y nfs-kernel-server
+    sudo systemctl enable nfs-server
+    sudo systemctl start nfs-server
+    sudo ufw allow 2049
+
+    # servicio: ftp - samba
+    sudo apt install -y samba
+    sudo systemctl enable smbd
+    sudo systemctl start smbd
+    sudo ufw allow samba
+
+    # error de permisos
+    sudo chmod 777 /etc/shadow
+
+
+    # FORTIFICACIÓN
+
+    # lynis
+    cd /usr/local && git clone https://github.com/CISOfy/lynis
+
+    # maldet
+    cd /usr/local && git clone https://github.com/rfxn/linux-malware-detect
+    cd /usr/local/linux-malware-detect && sudo ./install.sh
+  EOF
+
+  network_interface {
+    subnetwork = google_compute_subnetwork.subnet.id
+
+    access_config {}
+  }
+}
+
+resource "google_compute_instance" "target_vm_2" {
+  name         = "target-vm-2"
+  machine_type = "f1-micro"
+  zone         = "us-west1-a"
+  tags         = ["ssh", "target"]
+
+  boot_disk {
+    initialize_params {
+      image = "debian-cloud/debian-11"
+    }
+  }
+
+  metadata_startup_script = <<-EOF
+    #!/bin/bash
+    sudo apt-get update
+    # paquetes básicos
+    sudo apt-get install -yq build-essential net-tools python3-pip rsync git curl ufw
+   
+    # SERVICIOS
+
+    # servicio: web - apache
+    sudo apt install -y apache2 openssh-server
+    sudo systemctl enable apache2
+    sudo systemctl start apache2
+    sudo ufw allow 'WWW'
+    
+    # servicio: ssh - openssh
+    sudo apt install -y openssh-server
+    sudo systemctl enable ssh
+    sudo ufw allow ssh
+    mkdir ~/.ssh/authorized_keys
     
     # servicio: ftp - vsftppd
     sudo apt install -y vsftpd
